@@ -1,6 +1,16 @@
 import pandas as pd 
 
-def heterogenous_seq(df):
+def heterogenous_seq(df: pd.DataFrame) -> tuple[float, float]:
+    """
+    Implementation of the FIFO scheduling algorithm with high-efficiency cores.
+
+    Parameters: 
+        df (pandas dataframe): Dataframe containing process information.
+
+    Returns:
+        tuple[float, float]: The average turnaround time and wait time.
+    """
+
     queues = [[] for _ in range(6)]
 
     i, j = 0, 0
@@ -31,6 +41,9 @@ def heterogenous_seq(df):
 
     return turnaround/df.shape[0], wait/df.shape[0]
 
-if __name__ == "__main__":
+def main():
     df = pd.read_csv('processes.csv')
     print(heterogenous_seq(df))
+
+if __name__ == "__main__":
+    main()

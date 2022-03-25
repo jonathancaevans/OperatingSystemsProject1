@@ -1,19 +1,27 @@
-import numpy as np 
-import pandas as pd 
-import matplotlib.pyplot as plt
+import pandas as pd
 
-def heterogenous(df):
-    turnaround = 0
-    wait = 0
+def heterogenous(df: pd.DataFrame) -> tuple[float, float]:
+    """
+    Implementation of the SJF scheduling algorithm with high-efficiency cores.
 
+    Parameters: 
+        df (pandas dataframe): Dataframe containing process information.
+
+    Returns:
+        tuple[float, float]: The average turnaround time and wait time.
+    """
+
+    # sort the process list by burst time, ascending
     processes = sorted(df.to_numpy().tolist(), key=lambda x: x[1])
-    processors = [0] * 6
     queues = [[] for _ in range(6)]
 
     for i, process in enumerate(processes):
         queues[i % 6].append(process)
 
-    #Calculate wait and turnaround
+    # Calculate wait and turnaround
+    wait = 0
+    turnaround = 0
+    processors = [0] * 6
     for i in range(6):
         for process in queues[i]:
             if i < 3:
@@ -27,6 +35,9 @@ def heterogenous(df):
 
     return turnaround/df.shape[0], wait/df.shape[0]
 
-if __name__ == "__main__":
+def main():
     df = pd.read_csv('processes.csv')
     print(heterogenous(df))
+
+if __name__ == "__main__":
+    main()
