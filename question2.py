@@ -10,30 +10,8 @@ def heterogenous(df):
     processors = [0] * 6
     queues = [[] for _ in range(6)]
 
-    # low_req = [p for p in processes if p <= 8e9]
-    # high_req = [p for p in processes if p > 8e9]
-
-    while len(processes) > 5:
-        a,b,c = processes.pop(0),processes.pop(0),processes.pop(0)
-
-        i = 0
-
-        while((i < len(processes) - 3) and (a[1] < processes[i][1]/2)):
-            i+=1
-
-        d,e,f = processes.pop(i),processes.pop(i),processes.pop(i)
-
-        queues[0].append(a)
-        queues[1].append(b)
-        queues[2].append(c)
-        queues[3].append(d)
-        queues[4].append(e)
-        queues[5].append(f)
-
-    i=5
-    while len(processes) > 0:
-        queues[i].append(processes.pop())
-        i-=1
+    for i, process in enumerate(processes):
+        queues[i % 6].append(process)
 
     #Calculate wait and turnaround
     for i in range(6):
@@ -44,7 +22,7 @@ def heterogenous(df):
                 turnaround += processors[i]
             else:
                 wait += processors[i]
-                processors[i] += process[1]
+                processors[i] += process[1] / 2 # high-efficiency cores complete twice as fast
                 turnaround += processors[i]
 
     return turnaround/df.shape[0], wait/df.shape[0]
@@ -52,4 +30,3 @@ def heterogenous(df):
 if __name__ == "__main__":
     df = pd.read_csv('processes.csv')
     print(heterogenous(df))
-    
