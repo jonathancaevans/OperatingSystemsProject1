@@ -11,11 +11,15 @@ def heterogenous_mem(df):
     low_req = [p for p in processes if p[2] <= 8e9]
     high_req = [p for p in processes if p[2] > 8e9]
 
-    for i, process in enumerate(high_req):
-        queues[3 + i % 3].append(process)
+    i, j = 0, 0
+    while low_req or high_req:
+        if high_req:
+            queues[3 + j % 3].append(high_req.pop(0))
+            j += 1
 
-    for i, process in enumerate(low_req):
-        queues[i % 3].append(process)
+        if low_req:
+            queues[i % 6].append(low_req.pop(0))
+            i += 1
 
     # Calculate wait and turnaround
     for i in range(6):
