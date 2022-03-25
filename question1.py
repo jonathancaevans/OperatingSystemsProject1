@@ -5,17 +5,9 @@ import numpy as np
 def FIFO(df, n):
     processes = df.to_numpy().tolist()
 
-    turnaround = 0
+    processors = [processes.pop(0)[1] for _ in range(n)]
+    turnaround = sum(burst_time for burst_time in processors)
     wait = 0
-
-    processors = []
-    for i in range(n):
-        processors.append([])
-
-    for i, processor in enumerate(processors):
-        process = processes.pop(0)
-        processors[i] = process[1]
-        turnaround += process[1]
 
     for process in processes:
         nextOpen = processors.index(min(processors))
@@ -29,21 +21,11 @@ def FIFO(df, n):
     return turnaround/df.shape[0], wait/df.shape[0]
 
 def SJF(df, n):
-    processes = df.to_numpy().tolist()
+    processes = sorted(df.to_numpy().tolist(), key = lambda x: x[1])
 
-    processes.sort(key = lambda x: x[1])
-
-    turnaround = 0
+    processors = [processes.pop(0)[1] for _ in range(n)]
+    turnaround = sum(burst_time for burst_time in processors)
     wait = 0
-
-    processors = []
-    for i in range(n):
-        processors.append([])
-
-    for i, processor in enumerate(processors):
-        process = processes.pop(0)
-        processors[i] = process[1]
-        turnaround += process[1]
 
     for process in processes:
         nextOpen = processors.index(min(processors))
@@ -57,7 +39,7 @@ def SJF(df, n):
     return turnaround/df.shape[0], wait/df.shape[0]
 
 def RR(df, n, quantum):
-    # list of burst & remaining times
+    # list of burst times & remaining times
     ready = deque([rec[1], rec[1]] for rec in df.to_numpy().tolist())
 
     turnaround = 0
@@ -92,4 +74,4 @@ if __name__ == "__main__":
     df = pd.read_csv('processes.csv')
     print(FIFO(df,6))
     print(SJF(df,6))
-    print(RR(df, 6, 10**6 + (10**12 - 10**6)//2))
+    print(RR(df, 6, 10**13))

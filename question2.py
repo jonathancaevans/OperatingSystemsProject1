@@ -1,24 +1,18 @@
 import numpy as np 
 import pandas as pd 
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 
 def heterogenous(df):
-    clockSpeeds = [1,1,1,2,2,2]
     turnaround = 0
     wait = 0
 
-    processes = df.to_numpy().tolist()
+    processes = sorted(df.to_numpy().tolist(), key=lambda x: x[1])
+    processors = [0] * 6
+    queues = [[] for _ in range(6)]
 
-    processors = []
-    for i in range(6):
-        processors.append(0)
+    # low_req = [p for p in processes if p <= 8e9]
+    # high_req = [p for p in processes if p > 8e9]
 
-    queues = []
-    for i in range(6):
-        queues.append([])
-
-    processes.sort(key = lambda x: x[1])
-    
     while len(processes) > 5:
        a,b,c = processes.pop(0),processes.pop(0),processes.pop(0)
 
@@ -47,10 +41,10 @@ def heterogenous(df):
            if i < 3:
                wait += processors[i]
                processors[i] += process[1]
-               turnaround += process[i]
+               turnaround += processors[i]
            else:
                wait += processors[i]
-               processors[i] += process[1]  
+               processors[i] += process[1]
                turnaround += processors[i]
 
     return turnaround/df.shape[0], wait/df.shape[0]
