@@ -21,7 +21,7 @@ def create_processes(n):
     for i in range(n):   # Iterate through each process, creating a dictionary for each one and appending it to the list. 
 
         # Create a dictionary for each process, with keys 'process number', 'burst time', and 'memory requirement'.  
-        d = {'process number': i + 1, 'burst time': random.randint(10**6, 10**12), 'memory requirement': random.randint(1000000, 16000000000)}     # Generate burst times between 10^6 - 10^12 cycles and memory requirements between 1MB - 16GB at random using randint().  
+        d = {'process number': i + 1, 'burst time': random.randint(10**7, 10**13), 'memory requirement': random.randint(1000000, 16000000000)}     # Generate burst times between 10^6 - 10^12 cycles and memory requirements between 1MB - 16GB at random using randint().  
         
         process_list.append(d)   # Append the dictionary to the list. 
 
