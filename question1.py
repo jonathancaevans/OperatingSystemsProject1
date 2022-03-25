@@ -12,8 +12,9 @@ def FIFO(df, n):
         processors.append([])
 
     for i, processor in enumerate(processors):
-        processors[i] = processes.pop(0)[1]
-        turnaround += processes.pop(0)[1]
+        process = processes.pop(0)
+        processors[i] = process[1]
+        turnaround += process[1]
 
     for process in processes:
         nextOpen = processors.index(min(processors))
@@ -39,8 +40,9 @@ def SJF(df, n):
         processors.append([])
 
     for i, processor in enumerate(processors):
-        processors[i] = processes.pop(0)[1]
-        turnaround += processes.pop(0)[1]
+        process = processes.pop(0)
+        processors[i] = process[1]
+        turnaround += process[1]
 
     for process in processes:
         nextOpen = processors.index(min(processors))
