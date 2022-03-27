@@ -1,11 +1,12 @@
-import pandas as pd 
+import pandas as pd
+
 
 def heterogenous_mem(df: pd.DataFrame) -> tuple[float, float]:
     """
     Implementation of the SJF scheduling algorithm with high-efficiency cores
     and memory requirements.
 
-    Parameters: 
+    Parameters:
         df (pandas dataframe): Dataframe containing process information.
 
     Returns:
@@ -43,14 +44,18 @@ def heterogenous_mem(df: pd.DataFrame) -> tuple[float, float]:
                 turnaround += elapsed[i]
             else:
                 wait += elapsed[i]
-                elapsed[i] += process[1] / 2 # high-efficiency cores complete twice as fast
+                elapsed[i] += (
+                    process[1] / 2
+                )  # high-efficiency cores complete twice as fast
                 turnaround += elapsed[i]
 
-    return turnaround/df.shape[0], wait/df.shape[0]
+    return turnaround / df.shape[0], wait / df.shape[0]
+
 
 def main():
-    df = pd.read_csv('processes.csv')
+    df = pd.read_csv("processes.csv")
     print(heterogenous_mem(df))
+
 
 if __name__ == "__main__":
     main()

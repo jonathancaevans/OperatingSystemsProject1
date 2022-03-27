@@ -3,11 +3,12 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def FIFO(df: pd.DataFrame, n: int) -> tuple[float, float]:
     """
     Implementation of the FIFO scheduling algorithm.
 
-    Parameters: 
+    Parameters:
         df (pandas dataframe): Dataframe containing process information.
         n (int): Number of processors available.
 
@@ -27,19 +28,20 @@ def FIFO(df: pd.DataFrame, n: int) -> tuple[float, float]:
         # and add it to the sum
         nextOpen = processors.index(min(processors))
 
-        wait+=processors[nextOpen]
+        wait += processors[nextOpen]
 
         processors[nextOpen] += process[1]
 
         turnaround += processors[nextOpen]
 
-    return turnaround/df.shape[0], wait/df.shape[0]
+    return turnaround / df.shape[0], wait / df.shape[0]
+
 
 def SJF(df: pd.DataFrame, n: int) -> tuple[float, float]:
     """
     Implementation of the Shortest Job First scheduling algorithm.
 
-    Parameters: 
+    Parameters:
         df (pandas dataframe): Dataframe containing process information.
         n (int): Number of processors available.
 
@@ -60,19 +62,20 @@ def SJF(df: pd.DataFrame, n: int) -> tuple[float, float]:
         # and add it to the sum
         nextOpen = processors.index(min(processors))
 
-        wait+=processors[nextOpen]
+        wait += processors[nextOpen]
 
         processors[nextOpen] += process[1]
 
         turnaround += processors[nextOpen]
 
-    return turnaround/df.shape[0], wait/df.shape[0]
+    return turnaround / df.shape[0], wait / df.shape[0]
+
 
 def RR(df: pd.DataFrame, n: int, quantum: int) -> tuple[float, float]:
     """
     Implementation of the Round Robin scheduling algorithm.
 
-    Parameters: 
+    Parameters:
         df (pandas dataframe): Dataframe containing process information.
         n (int): Number of processors available.
         quantum (int): The time quantum to use.
@@ -88,8 +91,10 @@ def RR(df: pd.DataFrame, n: int, quantum: int) -> tuple[float, float]:
     turnaround = 0
     wait = 0
 
-    processors = deque(ready.popleft() for _ in range(n)) # contains currently executing processes
-    elapsed = [0] * n # total elapsed time per processor
+    processors = deque(
+        ready.popleft() for _ in range(n)
+    )  # contains currently executing processes
+    elapsed = [0] * n  # total elapsed time per processor
 
     while len(processors) > 0:
         # visit each current process
@@ -117,33 +122,34 @@ def RR(df: pd.DataFrame, n: int, quantum: int) -> tuple[float, float]:
             if len(ready) > 0:
                 processors.append(ready.popleft())
 
-    return turnaround/df.shape[0], wait/df.shape[0]
+    return turnaround / df.shape[0], wait / df.shape[0]
+
 
 def main():
-    df = pd.read_csv('processes.csv')
-    FIFO_output = FIFO(df,6)
-    SJF_output = SJF(df,6)
+    df = pd.read_csv("processes.csv")
+    FIFO_output = FIFO(df, 6)
+    SJF_output = SJF(df, 6)
     RR_output = RR(df, 6, 10**13)
 
-    print('FIFO:', FIFO_output)
-    print('SJF :', SJF_output)
-    print('RR  :', RR_output)
+    print("FIFO:", FIFO_output)
+    print("SJF :", SJF_output)
+    print("RR  :", RR_output)
 
-    labels = ["FIFO","SJF","RR"]
+    labels = ["FIFO", "SJF", "RR"]
     fig, ax = plt.subplots()
 
-    turnarounds = [FIFO_output[0],SJF_output[0],RR_output[0]]
-    waits = [FIFO_output[1],SJF_output[1],RR_output[1]]
+    turnarounds = [FIFO_output[0], SJF_output[0], RR_output[0]]
+    waits = [FIFO_output[1], SJF_output[1], RR_output[1]]
 
-    ax.bar(labels, waits, label='Wait')
-    ax.bar(labels, turnarounds, bottom=waits, label='Turnaround')
+    ax.bar(labels, waits, label="Wait")
+    ax.bar(labels, turnarounds, bottom=waits, label="Turnaround")
 
-    ax.set_ylabel('Cycles')
-    ax.set_title('Turnaround and wait cycles')
+    ax.set_ylabel("Cycles")
+    ax.set_title("Turnaround and wait cycles")
 
     ax.legend()
 
-    plt.savefig('Question1ComparitivePerformance.png',dpi=400)
+    plt.savefig("Question1ComparitivePerformance.png", dpi=400)
 
 
 if __name__ == "__main__":
