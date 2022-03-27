@@ -23,7 +23,7 @@ def heterogenous_mem(df: pd.DataFrame) -> tuple[float, float]:
     i, j = 0, 0
     while low_req or high_req:
         if high_req:
-            # assign processes which require > 8gb to only processors 3-6
+            # assign processes which require > 8gb to only processors 4-6
             queues[3 + j % 3].append(high_req.pop(0))
             j += 1
 
