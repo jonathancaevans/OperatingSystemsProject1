@@ -4,7 +4,7 @@ def heterogenous(df: pd.DataFrame) -> tuple[float, float]:
     """
     Implementation of the SJF scheduling algorithm with high-efficiency cores.
 
-    Parameters: 
+    Parameters:
         df (pandas dataframe): Dataframe containing process information.
 
     Returns:
@@ -15,8 +15,14 @@ def heterogenous(df: pd.DataFrame) -> tuple[float, float]:
     processes = sorted(df.to_numpy().tolist(), key=lambda x: x[1])
     queues = [[] for _ in range(6)]
 
-    for i, process in enumerate(processes):
-        queues[i % 6].append(process)
+    print(len(processes), len(processes[len(processes)//2:]) + len(processes[:len(processes)//2]))
+
+
+    for i, process in enumerate(processes[len(processes)//2:]):
+        queues[(i % 3)+3].append(process)
+
+    for i, process in enumerate(processes[:len(processes)//2]):
+        queues[(i % 3)].append(process)
 
     # Calculate wait and turnaround
     wait = 0

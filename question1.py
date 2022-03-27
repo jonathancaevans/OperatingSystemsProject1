@@ -1,5 +1,7 @@
 from collections import deque
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
 def FIFO(df: pd.DataFrame, n: int) -> tuple[float, float]:
     """
@@ -119,9 +121,30 @@ def RR(df: pd.DataFrame, n: int, quantum: int) -> tuple[float, float]:
 
 def main():
     df = pd.read_csv('processes.csv')
-    print('FIFO:', FIFO(df,6))
-    print('SJF :', SJF(df,6))
-    print('RR  :', RR(df, 6, 10**13))
+    FIFO_output = FIFO(df,6)
+    SJF_output = SJF(df,6)
+    RR_output = RR(df, 6, 10**13)
+
+    print('FIFO:', FIFO_output)
+    print('SJF :', SJF_output)
+    print('RR  :', RR_output)
+
+    labels = ["FIFO","SJF","RR"]
+    fig, ax = plt.subplots()
+
+    turnarounds = [FIFO_output[0],SJF_output[0],RR_output[0]]
+    waits = [FIFO_output[1],SJF_output[1],RR_output[1]]
+
+    ax.bar(labels, waits, label='Wait')
+    ax.bar(labels, turnarounds, bottom=waits, label='Turnaround')
+
+    ax.set_ylabel('Cycles')
+    ax.set_title('Turnaround and wait cycles')
+
+    ax.legend()
+
+    plt.savefig('Question1ComparitivePerformance.png',dpi=400)
+
 
 if __name__ == "__main__":
     main()
